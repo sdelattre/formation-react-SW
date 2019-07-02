@@ -1,32 +1,44 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Task from './Task';
 
 const tasks = [
-        {name: "Learn React", done: false},
-        {name: "Learn CSS", done: true},
-        {name: "Web development", done: true}
+        {id: 1, name: "Learn React", done: false},
+        {id: 2, name: "Learn CSS", done: true},
+        {id:3, name: "Web development", done: true}
     ];
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    class App extends React.Component {
+      constructor(props) {
+        super(props);
+    
+        this.state = {
+          tasks: tasks,
+        };
+      }
+
+      click(id) {
+        let tasks = this.state.tasks;
+        let state = tasks[id].done;
+        tasks[id].done = !state;
+        this.setState(state => ({
+          tasks: tasks
+        }));
+      }
+
+      render() {
+        return (
+          <ul>
+            {this.state.tasks.map(task => (
+          <Task
+            id={task.id}
+            key={task.id}
+            name={task.name}
+            done={task.done} 
+            click={this.click}/>
+            ))}
+          </ul>
+       )};
 }
 
 export default App;
