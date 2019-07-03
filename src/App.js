@@ -1,44 +1,37 @@
 import React from 'react';
 import './App.css';
 import Task from './Task';
+import { connect } from 'react-redux';
+import { changeTaskState } from "./actions/tasks"
 
-const tasks = [
-        {id: 1, name: "Learn React", done: false},
-        {id: 2, name: "Learn CSS", done: true},
-        {id:3, name: "Web development", done: true}
-    ];
-
-    class App extends React.Component {
-      constructor(props) {
-        super(props);
-    
-        this.state = {
-          tasks: tasks,
-        };
-      }
-
+class App extends React.Component {
       click(id) {
-        let tasks = this.state.tasks;
-        let state = tasks[id].done;
-        tasks[id].done = !state;
-        this.setState(state => ({
-          tasks: tasks
-        }));
+        this.props.changeTaskState(id);
       }
 
       render() {
         return (
           <ul>
-            {this.state.tasks.map(task => (
+            {this.props.tasks.list.map(task => (
           <Task
             id={task.id}
             key={task.id}
             name={task.name}
             done={task.done} 
-            click={this.click}/>
+            click={this.click.bind(this)}/>
             ))}
           </ul>
        )};
 }
 
-export default App;
+const mapStateToProps = state => {
+  return { tasks: state.tasks }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    changeTaskState: (id) => dispatch(changeTaskState(id))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
